@@ -5,7 +5,9 @@ RUN apt-get update && apt-get install -y \
       sqlite3 \
       git \
       cron \
-      && docker-php-ext-install zip pdo pdo_mysql bcmath exif sockets
+      libpng-dev \
+      libjpeg-dev \
+      && docker-php-ext-install zip pdo pdo_mysql bcmath exif sockets gd
 
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get install -y nodejs
