@@ -5,7 +5,8 @@ return [
         'id' => 'ID',
         'name' => 'Name',
         'status' => 'Status',
-        'created_at' => 'Created At',
+        'filename' => 'File Name',
+        'uploaded_at' => 'Uploaded At',
         'actions' => 'Actions',
     ],
     'buttons' => [
@@ -15,7 +16,7 @@ return [
         'remove' => 'Remove',
         'update' => 'Update',
         'create' => 'Create',
-        'add_new' => 'Add New',
+        'upload' => 'Upload',
     ],
     'texts' => [
         'app_description' => 'XLS parser',

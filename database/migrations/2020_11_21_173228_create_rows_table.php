@@ -18,7 +18,7 @@ class CreateRowsTable extends Migration
             $table->integer('import_id');
             $table->string('import_name');
             $table->date('import_date');
-            $table->bigInteger('file_id');
+            $table->bigInteger('file_id')->unsigned()->nullable();
             $table->timestamps();
         });
 

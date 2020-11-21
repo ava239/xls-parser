@@ -5,6 +5,7 @@ services:
     build: .
     volumes:
       - .:/app:cached
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
     ports:
       - "8000:8000"
     depends_on:

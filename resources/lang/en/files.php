@@ -7,5 +7,6 @@ return [
     'create_title' => 'Upload File',
     'flash' => [
         'created' => 'File has been uploaded',
-    ]
+    ],
+    'choose_file' => 'Choose file to upload'
 ];

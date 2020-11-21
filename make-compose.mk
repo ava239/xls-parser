@@ -7,6 +7,9 @@ compose-up:
 compose-bash:
 	docker-compose run app bash
 
+compose-link:
+	docker-compose run app php artisan storage:link
+
 compose-setup: compose-build
 	docker-compose run app make setup
 
