@@ -41,8 +41,10 @@ class FilesTest extends TestCase
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
 
-        Storage::disk()->assertExists("$fileName");
+        $file = File::latest()->first();
+        $supposedFilename = "{$file->id}-{$fileName}";
 
-        $this->assertDatabaseHas('files', ['name' => $fileName]);
+        $this->assertDatabaseHas('files', ['name' => $supposedFilename]);
+        Storage::disk()->assertExists($supposedFilename);
     }
 }
