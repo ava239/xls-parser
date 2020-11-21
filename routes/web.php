@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\FileController;
+use App\Http\Controllers\RowController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::view('/', 'welcome')->name('welcome');
+
+Route::resource('files', FileController::class)->only(['index', 'create', 'store']);
+Route::resource('rows', RowController::class);
