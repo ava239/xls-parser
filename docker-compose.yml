@@ -10,9 +10,6 @@ services:
     depends_on:
       - db
       - redis
-    command: make compose
-    stdin_open: true
-    tty: true
     env_file:
       - ./.env
 
@@ -23,7 +20,6 @@ services:
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_RANDOM_ROOT_PASSWORD: "true"
-
 
   redis:
     image: redis

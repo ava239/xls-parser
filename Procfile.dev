@@ -1,2 +1,3 @@
 web: php artisan serve --host 0.0.0.0 --port 8000 || php artisan serve --host 0.0.0.0 --port 8088
+cron: printenv > /etc/environment && echo "cron starting..." && (cron) && : > /var/log/cron.log && tail -f /var/log/cron.log
 frontend: npm run watch
