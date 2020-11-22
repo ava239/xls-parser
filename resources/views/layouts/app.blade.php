@@ -33,6 +33,7 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav mr-auto">
                     <li>{!! Helper::navLink('files.index', __('files.menu_link')) !!}</li>
+                    <li>{!! Helper::navLink('rows.index', __('rows.menu_link')) !!}</li>
                 </ul>
 
             </div>

@@ -4,6 +4,7 @@ return [
     'headers' => [
         'id' => 'ID',
         'name' => 'Name',
+        'date' => 'Date',
         'status' => 'Status',
         'filename' => 'File Name',
         'uploaded_at' => 'Uploaded At',

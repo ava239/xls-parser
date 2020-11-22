@@ -51,7 +51,7 @@ class RowsImport implements OnEachRow, WithHeadingRow, WithChunkReading, ShouldQ
 
     public function chunkSize(): int
     {
-        return $this->chunk;
+        return 100000;
     }
 
     public function registerEvents(): array
