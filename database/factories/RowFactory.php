@@ -23,7 +23,7 @@ class RowFactory extends Factory
     {
         return [
             'import_name' => $this->faker->text(20),
-            'import_id' => $this->faker->randomNumber,
+            'import_id' => $this->faker->randomNumber(),
             'import_date' => $this->faker->date()
         ];
     }
