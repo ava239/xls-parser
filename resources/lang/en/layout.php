@@ -23,5 +23,6 @@ return [
         'confirmation' => 'are you sure?',
         'toggle_navigation' => 'Toggle navigation',
         'name' => 'Name',
+        'rows' => 'rows',
     ]
 ];

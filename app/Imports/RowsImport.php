@@ -63,9 +63,13 @@ class RowsImport implements OnEachRow, WithHeadingRow, WithChunkReading, ShouldQ
                 [$rows] = array_values($event->getReader()->getTotalRows());
                 if ($rows <= $end) {
                     Redis::del("file:{$this->file->id}");
+                    $this->file->status = 'parsed';
+                    $this->file->save();
                     return null;
                 }
                 Redis::set("file:{$this->file->id}", $end);
+                $this->file->status = 'parsing in progress';
+                $this->file->save();
                 Excel::queueImport(new RowsImport($this->file), $this->file->name)->delay(30);
             }
         ];
