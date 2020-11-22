@@ -15,7 +15,7 @@ class CreateRowsTable extends Migration
     {
         Schema::create('rows', function (Blueprint $table) {
             $table->id();
-            $table->integer('import_id');
+            $table->string('import_id');
             $table->string('import_name');
             $table->date('import_date');
             $table->bigInteger('file_id')->unsigned()->nullable();

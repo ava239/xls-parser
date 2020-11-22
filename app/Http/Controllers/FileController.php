@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\RowsImport;
+use App\Jobs\ProcessFiles;
 use App\Models\File as FileModel;
+use App\Models\Row;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redis;
-use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FileController extends Controller
 {
     public function index()
     {
-        $files = FileModel::paginate(10);
+        $files = FileModel::latest()->with(['rows'])->paginate(10);
 
         return view('files.index', compact('files'));
     }
@@ -46,6 +48,7 @@ class FileController extends Controller
         $file->save();
 
         Redis::set("file:{$file->id}", 0);
+        Excel::queueImport(new RowsImport($file), $filename);
 
         flash(__('files.flash.created'))->success();
 

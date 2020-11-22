@@ -6,6 +6,7 @@ use App\Models\File;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 use Tests\TestCase;
 
 class FilesTest extends TestCase
@@ -32,6 +33,7 @@ class FilesTest extends TestCase
     public function testStore()
     {
         Storage::fake();
+        Excel::fake();
         $fileName = "{$this->faker->word}.xls";
         $data = [
             'file' => UploadedFile::fake()->create($fileName)
@@ -43,6 +45,8 @@ class FilesTest extends TestCase
 
         $file = File::latest()->first();
         $supposedFilename = "{$file->id}-{$fileName}";
+
+        Excel::assertQueued($supposedFilename);
 
         $this->assertDatabaseHas('files', ['name' => $supposedFilename]);
         Storage::disk()->assertExists($supposedFilename);

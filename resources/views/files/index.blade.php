@@ -18,7 +18,7 @@
                 <tr>
                     <td>{{ $file->id }}</td>
                     <td>{{ $file->name }}</td>
-                    <td>{{ $file->status }}</td>
+                    <td>{{ $file->status }}<br>{{ $file->rows->count() }}</td>
                     <td>{{ $file->created_at }}</td>
                 </tr>
             @endforeach

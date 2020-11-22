@@ -26,21 +26,8 @@ services:
     image: redis
 
   rabbitmq:
-    image: rabbitmq
+    build: ./rabbit
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASSWORD: guest
       RABBITMQ_DEFAULT_VHOST: /
-      RABBITMQ_SSL_CACERTFILE: /rootCA.pem
-      RABBITMQ_SSL_CERTFILE: /rootCA.pem
-      RABBITMQ_SSL_KEYFILE: /rootCA.key
-      RABBITMQ_SSL_VERIFY: verify_none
-      RABBITMQ_SSL_FAIL_IF_NO_PEER_CERT: "false"
-    volumes:
-      - "./certs/rootCA.pem:/rootCA.pem:ro"
-      - "./certs/rootCA.key:/rootCA.key:ro"
-    ports:
-      - 15671:15671
-      - 15672:15672
-      - 5671:5671
-      - 5672:5672
