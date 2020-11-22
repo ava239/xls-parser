@@ -17,7 +17,7 @@ class RowsTest extends TestCase
 
         $row = Row::first();
 
-        $response = $this->get(route('rows.index'));
+        $response = $this->get(route('files.rows.index', $file));
 
         $response->assertOk()
             ->assertSee($row->import_name);

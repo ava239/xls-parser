@@ -17,7 +17,7 @@
             @foreach($files as $file)
                 <tr>
                     <td>{{ $file->id }}</td>
-                    <td>{{ $file->name }}</td>
+                    <td><a href="{{ route('files.rows.index', $file->id) }}">{{ $file->name }}</a></td>
                     <td>{{ $file->status }}<br>{{ $file->rows_count }} {{ __('layout.texts.rows') }}</td>
                     <td>{{ $file->created_at }}</td>
                 </tr>
