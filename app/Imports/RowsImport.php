@@ -38,7 +38,7 @@ class RowsImport implements
         return new ModelRow([
             'import_id' => $id,
             'import_name' => $name,
-            'import_date' => Carbon::parse(Date::excelToTimestamp($date)),
+            'import_date' => Carbon::parse(Date::excelToDateTimeObject($date)),
             'file_id' => $this->file->id
         ]);
     }
