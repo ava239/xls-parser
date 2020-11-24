@@ -6,72 +6,64 @@ use App\Models\File;
 use App\Models\Row as ModelRow;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Redis;
-use Maatwebsite\Excel\Concerns\Importable;
-use Maatwebsite\Excel\Concerns\OnEachRow;
+use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterImport;
-use Maatwebsite\Excel\Facades\Excel;
-use Maatwebsite\Excel\Row;
-use Maatwebsite\Excel\Concerns\RemembersRowNumber;
+use Maatwebsite\Excel\Events\BeforeImport;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
-class RowsImport implements OnEachRow, WithHeadingRow, WithChunkReading, ShouldQueue, WithEvents
+class RowsImport implements
+    ToModel,
+    WithHeadingRow,
+    WithBatchInserts,
+    WithChunkReading,
+    ShouldQueue,
+    WithEvents,
+    WithCalculatedFormulas
 {
-    use Importable;
-    use RemembersRowNumber;
-
     protected File $file;
-    protected int $chunk = 1000;
 
     public function __construct(File $file)
     {
         $this->file = $file;
     }
 
-    public function onRow(Row $row)
+    public function model($row)
     {
-        $numRow = $row->getIndex();
-        $start = Redis::get("file:{$this->file->id}") ?? 0;
-        if ($numRow <= $start + 1 || $numRow >= $start + 2 + $this->chunk) {
-            return null;
-        }
-        $coll = $row->toArray(null, true);
-        $coll['date'] = Date::excelToTimestamp($coll['date']);
-        ['id' => $id, 'name' => $name, 'date' => $date] = $coll;
-        ModelRow::create([
+        ['id' => $id, 'name' => $name, 'date' => $date] = $row;
+        return new ModelRow([
             'import_id' => $id,
             'import_name' => $name,
-            'import_date' => Carbon::parse($date),
+            'import_date' => Carbon::parse(Date::excelToTimestamp($date)),
             'file_id' => $this->file->id
         ]);
     }
 
     public function chunkSize(): int
     {
-        return 100000;
+        return 1000;
     }
 
     public function registerEvents(): array
     {
         return [
             AfterImport::class => function (AfterImport $event) {
-                $start = Redis::get("file:{$this->file->id}") ?? 0;
-                $end = $start + $this->chunk;
-                [$rows] = array_values($event->getReader()->getTotalRows());
-                if ($rows <= $end) {
-                    Redis::del("file:{$this->file->id}");
-                    $this->file->status = 'parsed';
-                    $this->file->save();
-                    return null;
-                }
-                Redis::set("file:{$this->file->id}", $end);
+                $this->file->status = 'parsed';
+                $this->file->save();
+            },
+            BeforeImport::class => function (BeforeImport $event) {
                 $this->file->status = 'parsing in progress';
                 $this->file->save();
-                Excel::queueImport(new RowsImport($this->file), $this->file->name)->delay(30);
             }
         ];
+    }
+
+    public function batchSize(): int
+    {
+        return 1000;
     }
 }
